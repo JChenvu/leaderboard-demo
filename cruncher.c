@@ -116,24 +116,27 @@ void query(unsigned short qid, unsigned short artist, unsigned short areltd[], u
 		// filter by birthday
 		if (person->birthday < bdstart || person->birthday > bdend) continue;
 
-		// person must not like artist yet
-		if (cache[person_offset].fan) continue;
+		
 
 		// but person must like some of these other guys
 		score = cache[person_offset].score;
 		if (score < 1) continue;
 
+		// person must not like artist yet
+		if (cache[person_offset].fan) continue;
+		
 		// check if friend lives in same city and likes artist
 		for (knows_offset = person->knows_first;
 			knows_offset < person->knows_first + person->knows_n;
 			knows_offset++) {
 
-            knows_offset2=knows_map[knows_offset];
-			if (person->location != cache[knows_offset2].location) continue;
-
+           		 knows_offset2=knows_map[knows_offset];
+		
 			// friend must already like the artist
 			if (!cache[knows_offset2].fan) continue;
-
+			
+			if (person->location != cache[knows_offset2].location) continue;
+			
                 // realloc result array if we run out of space
                 if (result_length >= result_set_size) {
                     result_set_size *= 2;
